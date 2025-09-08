@@ -390,6 +390,19 @@ const App: React.FC = () => {
               <p className="text-lg text-gray-600 mt-4">
                   Upload a fashion item and a model photo. Our AI will handle the rest.
               </p>
+              {/* 
+                  DEVELOPER NOTE:
+                  To add your demo GIF, place your GIF file in the project's public folder
+                  and update the 'src' attribute of the img tag below.
+                  For example: src="/your-demo.gif"
+              */}
+              <div className="mt-6">
+                  <img 
+                      src="/placeholder-demo.gif" // <-- Replace with your actual GIF path
+                      alt="StyleSnap virtual try-on demo"
+                      className="rounded-lg w-full"
+                  />
+              </div>
             </div>
             
             {/* Right Card: Uploader */}
