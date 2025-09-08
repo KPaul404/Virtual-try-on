@@ -376,22 +376,24 @@ const App: React.FC = () => {
            </div>
         ) : (
           // Input View
-          <div className="w-full">
-            <div className="text-center">
-                <h1 className="text-4xl sm:text-5xl font-bold text-black leading-tight">
-                    Virtual try-on in a <span className="relative inline-block text-orange-500">
-                      snap.
-                      <svg className="absolute -bottom-2 left-0 w-full h-auto" viewBox="0 0 100 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M2 6C12.6667 1.33333 33.5 -2.5 50.5 6C67.5 14.5 86.1667 9.83333 98 6" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                      </svg>
-                    </span>
-                </h1>
-                <p className="text-lg text-gray-600 mt-4">
-                    Upload a fashion item and a model photo. Our AI will handle the rest.
-                </p>
+          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Left Card: Title and Description */}
+            <div className="h-full bg-white p-8 rounded-2xl shadow-xl border flex flex-col justify-center shine-effect">
+              <h1 className="text-4xl sm:text-5xl font-bold text-black leading-tight">
+                  Virtual try-on in a <span className="relative inline-block text-orange-500">
+                    snap.
+                    <svg className="absolute -bottom-2 left-0 w-full h-auto" viewBox="0 0 100 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 6C12.6667 1.33333 33.5 -2.5 50.5 6C67.5 14.5 86.1667 9.83333 98 6" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                    </svg>
+                  </span>
+              </h1>
+              <p className="text-lg text-gray-600 mt-4">
+                  Upload a fashion item and a model photo. Our AI will handle the rest.
+              </p>
             </div>
-
-            <div className="mt-12 bg-white p-8 rounded-2xl shadow-xl border shine-effect">
+            
+            {/* Right Card: Uploader */}
+            <div className="w-full bg-white p-8 rounded-2xl shadow-xl border">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Step 1 */}
                 <div>
