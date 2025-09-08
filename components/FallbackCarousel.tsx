@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 interface FallbackCarouselProps {
@@ -27,7 +26,7 @@ export const FallbackCarousel: React.FC<FallbackCarouselProps> = ({ images }) =>
   const currentImage = images[currentIndex];
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-lg">
+    <div className="bg-white p-4 rounded-xl shadow-lg border">
       <h3 className="text-xl font-bold text-center mb-4">The Judge was tough! Pick your favorite.</h3>
       <div className="relative group">
         <img src={currentImage} alt={`Fallback attempt ${currentIndex + 1}`} className="rounded-lg w-full" />
@@ -62,7 +61,7 @@ export const FallbackCarousel: React.FC<FallbackCarouselProps> = ({ images }) =>
       <a
         href={currentImage}
         download={`ai-styled-fashion-attempt-${currentIndex + 1}.jpg`}
-        className="mt-4 w-full inline-block bg-indigo-600 text-white text-center font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors"
+        className="mt-4 w-full inline-block bg-orange-500 text-white text-center font-semibold py-3 px-4 rounded-lg hover:bg-orange-600 transition-colors"
       >
         Download This Image
       </a>

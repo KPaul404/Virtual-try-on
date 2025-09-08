@@ -1,5 +1,5 @@
 {
-  "name": "AI Fashion Stylist",
+  "name": "StyleSnap",
   "description": "An AI-powered fashion styling and virtual try-on experience. Upload an e-commerce link or a photo of a clothing item, provide a model's photo, and watch as AI dresses the model, with a sophisticated AI judge ensuring the final image is perfect.",
   "requestFramePermissions": []
 }

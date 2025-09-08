@@ -56,7 +56,7 @@ export const generateStyledImage = async (
   colorDescription: string,
   refinementInstruction: string = ''
 ): Promise<Part[]> => {
-  const collagePart = fileToGenerativePart(collageBase64);
+  const collagePart = fileToGenerativePart( collageBase64);
 
   let prompt = '';
     
@@ -73,8 +73,8 @@ The provided collage contains:
 **Feedback to address:** You MUST incorporate this feedback: "${refinementInstruction}"
 
 **Crucial Rules:**
-- **Exact Match:** The clothing on the model must be an exact replica of the target fashion item. Use this detailed description for accuracy: "${colorDescription}". Pay close attention to the item's length, fit, color, and pattern.
-- **Preserve Model & Background:** Do NOT change the model's appearance (face, hair, body, skin tone), their pose, or the original background.
+- **Strict Preservation (Most Important Rule):** You MUST preserve the model's exact pose, facial expression, hair, body shape, and skin tone from the original photo. The background must also remain completely unchanged. The ONLY thing you are allowed to change is the clothing.
+- **Exact Clothing Match:** The clothing on the model must be an exact replica of the target fashion item. Use this detailed description for accuracy: "${colorDescription}". Pay close attention to the item's length, fit, color, and pattern.
 - **Final Output:** Your output must be a single, clean image of the newly styled model. Do not include elements from the collage.`;
 
   } else {
@@ -85,9 +85,9 @@ The provided collage contains a person (the model) and a piece of clothing (the 
 **Your Goal:** Generate a new, single, photorealistic image of the model wearing the fashion item.
 
 **Crucial Rules:**
-- **Exact Match:** The clothing on the model must be an exact replica of the fashion item from the collage. Use this detailed description for accuracy: "${colorDescription}". Pay close attention to the item's length, fit, color, and pattern.
+- **Strict Preservation (Most Important Rule):** You MUST preserve the model's exact pose, facial expression, hair, body shape, and skin tone from the original photo. The background must also remain completely unchanged. The ONLY thing you are allowed to change is the clothing.
+- **Exact Clothing Match:** The clothing on the model must be an exact replica of the fashion item from the collage. Use this detailed description for accuracy: "${colorDescription}". Pay close attention to the item's length, fit, color, and pattern.
 - **Natural Fit:** The clothing must look natural on the model, fitting their body and pose correctly.
-- **Preserve Model & Background:** Do NOT change the model's appearance (face, hair, body, skin tone), their pose, or the original background.
 - **Final Output:** Your output must be a single, clean image of the newly styled model. Do not include the separate fashion item in your final image.`;
   }
 

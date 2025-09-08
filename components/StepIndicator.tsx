@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface StepIndicatorProps {
@@ -20,9 +19,9 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => 
             {step.id < currentStep ? (
               <>
                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                  <div className="h-0.5 w-full bg-indigo-600" />
+                  <div className="h-0.5 w-full bg-orange-500" />
                 </div>
-                <a href="#" className="relative flex h-8 w-8 items-center justify-center bg-indigo-600 rounded-full hover:bg-indigo-900">
+                <a href="#" className="relative flex h-8 w-8 items-center justify-center bg-orange-500 rounded-full hover:bg-orange-600">
                   <svg className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.052-.143z" clipRule="evenodd" />
                   </svg>
@@ -33,8 +32,8 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => 
                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
                   <div className="h-0.5 w-full bg-gray-200" />
                 </div>
-                <a href="#" className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-indigo-600 bg-white" aria-current="step">
-                  <span className="h-2.5 w-2.5 rounded-full bg-indigo-600" aria-hidden="true" />
+                <a href="#" className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-orange-500 bg-white" aria-current="step">
+                  <span className="h-2.5 w-2.5 rounded-full bg-orange-500" aria-hidden="true" />
                 </a>
               </>
             ) : (
@@ -47,7 +46,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => 
                 </a>
               </>
             )}
-            <span className="absolute top-10 w-max -translate-x-1/2 text-center text-sm font-medium text-gray-700">{step.name}</span>
+            <span className="absolute top-10 w-max -translate-x-1/2 text-center text-sm font-medium text-black">{step.name}</span>
           </li>
         ))}
       </ol>
