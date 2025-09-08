@@ -411,7 +411,7 @@ const App: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-black">Provide a Model</h3>
-                      <p className="text-gray-600">Upload a photo of yourself or a model. Best results with clear, front-facing poses.</p>
+                      <p className="text-gray-600">Upload a photo of yourself or a model you'd want. Fore best results, provide a clear, front-facing photo.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -422,7 +422,7 @@ const App: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-black">See the Magic</h3>
-                      <p className="text-gray-600">Our AI generates a new image, preserving the model's pose while realistically adding the item.</p>
+                      <p className="text-gray-600">Our AI generates a new image, and as it does allows you to view the entire generation and judging process.</p>
                     </div>
                   </div>
                 </div>
