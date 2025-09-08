@@ -37,13 +37,13 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onClose }) => {
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-center h-16 w-16 rounded-full bg-orange-500 text-white font-bold text-2xl mx-auto mb-4 border-4 border-orange-200">2</div>
             <h3 className="text-xl font-semibold mb-2">Upload Model Photo</h3>
-            <p className="text-gray-600 text-sm">Provide a photo of the model you want to see wearing the item.</p>
+            <p className="text-gray-600 text-sm">Provide a photo of you or the model you want to see wearing the item.</p>
           </div>
           {/* Step 3 */}
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-center h-16 w-16 rounded-full bg-orange-500 text-white font-bold text-2xl mx-auto mb-4 border-4 border-orange-200">3</div>
             <h3 className="text-xl font-semibold mb-2">Start Styling</h3>
-            <p className="text-gray-600 text-sm">Our AI will generate a photorealistic image of the model wearing the fashion item.</p>
+            <p className="text-gray-600 text-sm">Our AI will generate an image of you or the model wearing the fashion item.</p>
           </div>
         </div>
       </div>

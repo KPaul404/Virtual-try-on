@@ -201,7 +201,7 @@ const App: React.FC = () => {
 
   const handleGenerate = async () => {
     if (!fashionItemImage || !modelImage) {
-      setError('Please provide both a fashion item and a model image.');
+      setError('Please provide both a fashion item and a models or your image.');
       return;
     }
 
@@ -391,19 +391,41 @@ const App: React.FC = () => {
               <p className="text-lg text-gray-600 mt-4">
                   Upload a fashion item and a model photo. Our AI will handle the rest.
               </p>
-              {/* 
-                  DEVELOPER NOTE:
-                  To add your demo GIF, place your GIF file in the project's 'public' folder
-                  and update the 'src' attribute of the img tag below.
-                  For example: src="/your-demo.gif"
-              */}
-              <div className="mt-6">
-                  <img 
-                      src="https://storage.googleapis.com/maker-suite-media/i/44535310-f127-4df3-8686-3532f837332f"
-                      alt="StyleSnap virtual try-on demo"
-                      className="rounded-lg w-full"
-                  />
-              </div>
+                <div className="mt-8 space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 text-orange-500">
+                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-black">Upload Your Item</h3>
+                      <p className="text-gray-600">Provide a photo of any clothing item from an online store or your own closet.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 text-orange-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-black">Provide a Model</h3>
+                      <p className="text-gray-600">Upload a photo of yourself or a model. Best results with clear, front-facing poses.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 text-orange-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                           <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-black">See the Magic</h3>
+                      <p className="text-gray-600">Our AI generates a new image, preserving the model's pose while realistically adding the item.</p>
+                    </div>
+                  </div>
+                </div>
             </div>
             
             {/* Right Card: Uploader */}
@@ -415,7 +437,6 @@ const App: React.FC = () => {
                     <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500 text-white font-bold text-lg">1</div>
                     <h2 className="text-xl font-semibold text-black">Upload Fashion Item</h2>
                   </div>
-                  <p className="text-gray-500 mb-4 text-sm">Simply upload your fashion item image or a product photo from an e-commerce store.</p>
                   <ImageUploader
                       onImageUpload={setFashionItemImage} 
                       existingImage={fashionItemImage} 
@@ -429,11 +450,10 @@ const App: React.FC = () => {
                     <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500 text-white font-bold text-lg">2</div>
                     <h2 className="text-xl font-semibold text-black">Upload Model Photo</h2>
                   </div>
-                  <p className="text-gray-500 mb-4 text-sm">Provide a photo of the model you want to see wearing the item.</p>
                   <ImageUploader
                       onImageUpload={setModelImage} 
                       existingImage={modelImage} 
-                      label="Upload Model's Photo"
+                      label="Upload Model's/Your Photo"
                   />
                 </div>
               </div>
@@ -443,14 +463,13 @@ const App: React.FC = () => {
                     <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500 text-white font-bold text-lg">3</div>
                     <h2 className="text-xl font-semibold text-black">Start Styling</h2>
                 </div>
-                <p className="text-gray-500 mb-6 text-sm max-w-md mx-auto">Our AI will generate a photorealistic image of the model wearing the fashion item.</p>
                 
                 {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
                 <button
                     onClick={handleGenerate}
                     disabled={isGenerateDisabled}
-                    className="bg-orange-500 text-white font-bold py-4 px-12 rounded-lg text-lg hover:bg-orange-600 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105 disabled:transform-none"
+                    className="mt-4 bg-orange-500 text-white font-bold py-4 px-12 rounded-lg text-lg hover:bg-orange-600 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105 disabled:transform-none"
                 >
                     {isLoading ? 'Generating...' : 'Start Styling'}
                 </button>
