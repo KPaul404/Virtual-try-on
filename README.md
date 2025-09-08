@@ -11,4 +11,4 @@
    `npm run dev`
 ----
 
-Feel free to test the app here stylesnapp.vercel.app 
+Feel free to test the app [here](stylesnapp.vercel.app) 
