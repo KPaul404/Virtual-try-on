@@ -331,9 +331,9 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
-      <Header onHowItWorksClick={() => setShowHowItWorks(true)} />
+      <Header onHowItWorksClick={() => setShowHowItWorks(true)} onLogoClick={resetState} />
       {showHowItWorks && <HowItWorks onClose={() => setShowHowItWorks(false)} />}
-      <main className="w-full max-w-5xl mx-auto p-4 sm:p-8 flex-grow flex items-center">
+      <main className="w-full max-w-6xl mx-auto p-4 sm:p-8 flex-grow flex items-center">
         {showResultsView ? (
           // Results View
            <div className="w-full">
@@ -379,7 +379,12 @@ const App: React.FC = () => {
           <div className="w-full">
             <div className="text-center">
                 <h1 className="text-4xl sm:text-5xl font-bold text-black leading-tight">
-                    Virtual try-on in a <span className="text-orange-500">snap.</span>
+                    Virtual try-on in a <span className="relative inline-block text-orange-500">
+                      snap.
+                      <svg className="absolute -bottom-2 left-0 w-full h-auto" viewBox="0 0 100 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M2 6C12.6667 1.33333 33.5 -2.5 50.5 6C67.5 14.5 86.1667 9.83333 98 6" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                      </svg>
+                    </span>
                 </h1>
                 <p className="text-lg text-gray-600 mt-4">
                     Upload a fashion item and a model photo. Our AI will handle the rest.
