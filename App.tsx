@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from './components/ImageUploader';
-import { StepIndicator } from './components/StepIndicator';
 import { Loader } from './components/Loader';
 import { ResultCard } from './components/ResultCard';
 import { analyzeImageForColor, generateStyledImage, judgeGeneratedImage, filterUnchangedImages } from './services/geminiService';
@@ -21,6 +20,7 @@ const App: React.FC = () => {
   
   const [finalImage, setFinalImage] = useState<string | null>(null);
   const [fallbackImages, setFallbackImages] = useState<string[] | null>(null);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
 
   const resetState = () => {
     setFashionItemImage(null);
@@ -330,9 +330,10 @@ const App: React.FC = () => {
   const showResultsView = processSteps.length > 0;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <Header />
-      <main className="w-full max-w-6xl mx-auto p-4 sm:p-8 flex-grow">
+    <div className="min-h-screen bg-stone-50 flex flex-col">
+      <Header onHowItWorksClick={() => setShowHowItWorks(true)} />
+      {showHowItWorks && <HowItWorks onClose={() => setShowHowItWorks(false)} />}
+      <main className="w-full max-w-5xl mx-auto p-4 sm:p-8 flex-grow flex items-center">
         {showResultsView ? (
           // Results View
            <div className="w-full">
@@ -375,55 +376,66 @@ const App: React.FC = () => {
            </div>
         ) : (
           // Input View
-          <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center my-8 sm:my-16">
-                {/* Left Column: Info Card */}
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-2xl shadow-xl border shine-effect h-full">
-                    <div className="text-center lg:text-left">
-                        <h1 className="text-4xl sm:text-5xl font-bold text-black leading-tight">
-                            Virtual try-on<br />in a <span className="text-orange-500">snap.</span>
-                        </h1>
-                        <p className="text-lg text-gray-600 mt-4">
-                            Upload a fashion item and a model photo. Our AI will handle the rest.
-                        </p>
-                    </div>
+          <div className="w-full">
+            <div className="text-center">
+                <h1 className="text-4xl sm:text-5xl font-bold text-black leading-tight">
+                    Virtual try-on in a <span className="text-orange-500">snap.</span>
+                </h1>
+                <p className="text-lg text-gray-600 mt-4">
+                    Upload a fashion item and a model photo. Our AI will handle the rest.
+                </p>
+            </div>
+
+            <div className="mt-12 bg-white p-8 rounded-2xl shadow-xl border shine-effect">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Step 1 */}
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500 text-white font-bold text-lg">1</div>
+                    <h2 className="text-xl font-semibold text-black">Upload Fashion Item</h2>
+                  </div>
+                  <p className="text-gray-500 mb-4 text-sm">Simply upload your fashion item image or a product photo from an e-commerce store.</p>
+                  <ImageUploader
+                      onImageUpload={setFashionItemImage} 
+                      existingImage={fashionItemImage} 
+                      label="Upload Item Image"
+                  />
                 </div>
                 
-                {/* Right Column: Uploader */}
-                <div className="bg-white p-8 rounded-2xl shadow-xl border">
-                    <StepIndicator currentStep={!fashionItemImage ? 1 : !modelImage ? 2 : 3} />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                        <div className="flex flex-col">
-                            <h3 className="text-sm font-semibold mb-2 text-gray-700 text-center">1. FASHION ITEM</h3>
-                            <div className="bg-gray-50 p-2 rounded-lg flex-grow flex items-center justify-center">
-                            <ImageUploader
-                                onImageUpload={setFashionItemImage} 
-                                existingImage={fashionItemImage} 
-                                label="Upload Item Image"
-                            />
-                            </div>
-                        </div>
-                        <div className="flex flex-col">
-                            <h3 className="text-sm font-semibold mb-2 text-gray-700 text-center">2. MODEL PHOTO</h3>
-                            <div className="bg-gray-50 p-2 rounded-lg flex-grow flex items-center justify-center">
-                            <ImageUploader onImageUpload={setModelImage} existingImage={modelImage} label="Upload Model's Photo" />
-                            </div>
-                        </div>
-                    </div>
-                    {error && <p className="text-red-500 text-center mt-6">{error}</p>}
-                    <div className="mt-8 text-center">
-                    <button
-                        onClick={handleGenerate}
-                        disabled={isGenerateDisabled}
-                        className="bg-orange-500 text-white font-bold py-4 px-12 rounded-lg text-lg hover:bg-orange-600 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105 disabled:transform-none"
-                    >
-                        {isLoading ? 'Generating...' : 'Start Styling'}
-                    </button>
-                    </div>
+                {/* Step 2 */}
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500 text-white font-bold text-lg">2</div>
+                    <h2 className="text-xl font-semibold text-black">Upload Model Photo</h2>
+                  </div>
+                  <p className="text-gray-500 mb-4 text-sm">Provide a photo of the model you want to see wearing the item.</p>
+                  <ImageUploader
+                      onImageUpload={setModelImage} 
+                      existingImage={modelImage} 
+                      label="Upload Model's Photo"
+                  />
                 </div>
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-gray-200 text-center">
+                <div className="flex items-center gap-3 mb-4 justify-center">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500 text-white font-bold text-lg">3</div>
+                    <h2 className="text-xl font-semibold text-black">Start Styling</h2>
+                </div>
+                <p className="text-gray-500 mb-6 text-sm max-w-md mx-auto">Our AI will generate a photorealistic image of the model wearing the fashion item.</p>
+                
+                {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
+                <button
+                    onClick={handleGenerate}
+                    disabled={isGenerateDisabled}
+                    className="bg-orange-500 text-white font-bold py-4 px-12 rounded-lg text-lg hover:bg-orange-600 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105 disabled:transform-none"
+                >
+                    {isLoading ? 'Generating...' : 'Start Styling'}
+                </button>
+              </div>
             </div>
-            <HowItWorks />
-          </>
+          </div>
         )}
       </main>
       <Footer />
