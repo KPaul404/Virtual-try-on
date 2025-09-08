@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from './components/ImageUploader';
 import { Loader } from './components/Loader';
@@ -392,13 +393,13 @@ const App: React.FC = () => {
               </p>
               {/* 
                   DEVELOPER NOTE:
-                  To add your demo GIF, place your GIF file in the project's public folder
+                  To add your demo GIF, place your GIF file in the project's 'public' folder
                   and update the 'src' attribute of the img tag below.
                   For example: src="/your-demo.gif"
               */}
               <div className="mt-6">
                   <img 
-                      src="/components/ezgif.gif" // <-- Replace with your actual GIF path
+                      src="https://storage.googleapis.com/maker-suite-media/i/44535310-f127-4df3-8686-3532f837332f"
                       alt="StyleSnap virtual try-on demo"
                       className="rounded-lg w-full"
                   />
