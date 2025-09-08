@@ -398,7 +398,7 @@ const App: React.FC = () => {
               */}
               <div className="mt-6">
                   <img 
-                      src="/placeholder-demo.gif" // <-- Replace with your actual GIF path
+                      src="/components/ezgif.gif" // <-- Replace with your actual GIF path
                       alt="StyleSnap virtual try-on demo"
                       className="rounded-lg w-full"
                   />
