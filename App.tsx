@@ -328,8 +328,13 @@ const App: React.FC = () => {
       console.error(err);
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
       if (errorMessage.includes('429') && (errorMessage.includes('RESOURCE_EXHAUSTED') || errorMessage.toLowerCase().includes('quota'))) {
-        setError('The default API quota has been exceeded. Please provide your own key to continue.');
-        updateLastProcessStep({ status: 'error', title: 'API Quota Exceeded', description: 'The default API key has hit its usage limit.' });
+        // If we were retrying with a user-provided key, the error message should be different to avoid confusion.
+        if (overrideApiKey) {
+            setError('The API key you provided seems to be invalid or has also exceeded its quota. Please try a different key or check your Google AI Studio dashboard.');
+        } else {
+            setError('The default API quota has been exceeded. Please provide your own key to continue.');
+        }
+        updateLastProcessStep({ status: 'error', title: 'API Quota Exceeded', description: 'The API key has hit its usage limit.' });
         setShowApiKeyModal(true);
       } else {
         setError(`Generation failed: ${errorMessage}`);
