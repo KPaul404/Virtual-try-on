@@ -204,11 +204,13 @@ const App: React.FC = () => {
     });
   }, []);
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (overrideApiKey?: string) => {
     if (!fashionItemImage || !modelImage) {
       setError('Please provide both a fashion item and a models or your image.');
       return;
     }
+    
+    const apiKeyToUse = overrideApiKey || sessionApiKey;
 
     setIsLoading(true);
     setError(null);
@@ -220,7 +222,7 @@ const App: React.FC = () => {
     try {
       // 1. Analyze Color
       addProcessStep({ status: 'processing', title: 'Analyzing Fashion Item', description: 'AI is extracting precise color and texture details.' });
-      const colorDescription = await analyzeImageForColor(fashionItemImage, sessionApiKey);
+      const colorDescription = await analyzeImageForColor(fashionItemImage, apiKeyToUse);
       updateLastProcessStep({ status: 'complete', description: `Analysis complete. Item description: ${colorDescription}` });
       
       // 2. Create Initial Collage
@@ -244,7 +246,7 @@ const App: React.FC = () => {
         // 3. Generate Image with Nano Banana
         addProcessStep({ status: 'processing', title: `AI Styling (Attempt ${attempt}/${MAX_RETRIES})`, description: 'The AI is dressing the model. This may take a moment.' });
         
-        const generatedParts = await generateStyledImage(collageBase64, colorDescription, judgementFeedback, sessionApiKey);
+        const generatedParts = await generateStyledImage(collageBase64, colorDescription, judgementFeedback, apiKeyToUse);
         
         const imagePart = generatedParts.find(part => part.inlineData);
         if (!imagePart?.inlineData) {
@@ -265,7 +267,7 @@ const App: React.FC = () => {
 
         // 4. Judge the image
         addProcessStep({ status: 'processing', title: `Quality Check (Attempt ${attempt})`, description: 'The AI Judge is reviewing the result for accuracy.' });
-        const { decision, feedback } = await judgeGeneratedImage(fashionItemImage, croppedImageForJudge, colorDescription, sessionApiKey);
+        const { decision, feedback } = await judgeGeneratedImage(fashionItemImage, croppedImageForJudge, colorDescription, apiKeyToUse);
 
         if (decision.toLowerCase() === 'accept') {
           isAccepted = true;
@@ -292,7 +294,7 @@ const App: React.FC = () => {
         });
 
         if (generatedImagesHistory.length > 0 && modelImage) {
-          const changedImages = await filterUnchangedImages(modelImage, generatedImagesHistory, sessionApiKey);
+          const changedImages = await filterUnchangedImages(modelImage, generatedImagesHistory, apiKeyToUse);
 
           if (changedImages.length > 0) {
             updateLastProcessStep({
@@ -338,13 +340,12 @@ const App: React.FC = () => {
     }
   };
 
-  const handleApiKeySubmit = async (key: string) => {
-    setSessionApiKey(key);
+  const handleApiKeySubmit = (key: string) => {
+    const trimmedKey = key.trim();
+    setSessionApiKey(trimmedKey);
     setShowApiKeyModal(false);
-    // Use a timeout to ensure state has updated before retrying
-    setTimeout(() => {
-        handleGenerate();
-    }, 100);
+    // Pass the key directly to retry the generation, avoiding state update race conditions.
+    handleGenerate(trimmedKey);
   };
 
   const isGenerateDisabled = !fashionItemImage || !modelImage || isLoading;
@@ -492,7 +493,7 @@ const App: React.FC = () => {
                 {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
                 <button
-                    onClick={handleGenerate}
+                    onClick={() => handleGenerate()}
                     disabled={isGenerateDisabled}
                     className="mt-4 bg-orange-500 text-white font-bold py-4 px-12 rounded-lg text-lg hover:bg-orange-600 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105 disabled:transform-none"
                 >
