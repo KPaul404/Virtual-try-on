@@ -10,6 +10,7 @@ import { FallbackCarousel } from './components/FallbackCarousel';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HowItWorks } from './components/HowItWorks';
+import { ApiKeyModal } from './components/ApiKeyModal';
 
 const App: React.FC = () => {
   const [fashionItemImage, setFashionItemImage] = useState<string | null>(null);
@@ -23,6 +24,9 @@ const App: React.FC = () => {
   const [fallbackImages, setFallbackImages] = useState<string[] | null>(null);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
 
+  const [sessionApiKey, setSessionApiKey] = useState<string | null>(null);
+  const [showApiKeyModal, setShowApiKeyModal] = useState<boolean>(false);
+
   const resetState = () => {
     setFashionItemImage(null);
     setModelImage(null);
@@ -31,6 +35,7 @@ const App: React.FC = () => {
     setProcessSteps([]);
     setFinalImage(null);
     setFallbackImages(null);
+    // Do not reset sessionApiKey, user might want to retry with same images
   };
 
   const addProcessStep = (step: Omit<ProcessStep, 'id'>) => {
@@ -215,7 +220,7 @@ const App: React.FC = () => {
     try {
       // 1. Analyze Color
       addProcessStep({ status: 'processing', title: 'Analyzing Fashion Item', description: 'AI is extracting precise color and texture details.' });
-      const colorDescription = await analyzeImageForColor(fashionItemImage);
+      const colorDescription = await analyzeImageForColor(fashionItemImage, sessionApiKey);
       updateLastProcessStep({ status: 'complete', description: `Analysis complete. Item description: ${colorDescription}` });
       
       // 2. Create Initial Collage
@@ -239,7 +244,7 @@ const App: React.FC = () => {
         // 3. Generate Image with Nano Banana
         addProcessStep({ status: 'processing', title: `AI Styling (Attempt ${attempt}/${MAX_RETRIES})`, description: 'The AI is dressing the model. This may take a moment.' });
         
-        const generatedParts = await generateStyledImage(collageBase64, colorDescription, judgementFeedback);
+        const generatedParts = await generateStyledImage(collageBase64, colorDescription, judgementFeedback, sessionApiKey);
         
         const imagePart = generatedParts.find(part => part.inlineData);
         if (!imagePart?.inlineData) {
@@ -260,7 +265,7 @@ const App: React.FC = () => {
 
         // 4. Judge the image
         addProcessStep({ status: 'processing', title: `Quality Check (Attempt ${attempt})`, description: 'The AI Judge is reviewing the result for accuracy.' });
-        const { decision, feedback } = await judgeGeneratedImage(fashionItemImage, croppedImageForJudge, colorDescription);
+        const { decision, feedback } = await judgeGeneratedImage(fashionItemImage, croppedImageForJudge, colorDescription, sessionApiKey);
 
         if (decision.toLowerCase() === 'accept') {
           isAccepted = true;
@@ -287,7 +292,7 @@ const App: React.FC = () => {
         });
 
         if (generatedImagesHistory.length > 0 && modelImage) {
-          const changedImages = await filterUnchangedImages(modelImage, generatedImagesHistory);
+          const changedImages = await filterUnchangedImages(modelImage, generatedImagesHistory, sessionApiKey);
 
           if (changedImages.length > 0) {
             updateLastProcessStep({
@@ -320,11 +325,26 @@ const App: React.FC = () => {
     } catch (err) {
       console.error(err);
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
-      setError(`Generation failed: ${errorMessage}`);
-      addProcessStep({ status: 'error', title: 'Process Failed', description: errorMessage });
+      if (errorMessage.includes('429') && (errorMessage.includes('RESOURCE_EXHAUSTED') || errorMessage.toLowerCase().includes('quota'))) {
+        setError('The default API quota has been exceeded. Please provide your own key to continue.');
+        updateLastProcessStep({ status: 'error', title: 'API Quota Exceeded', description: 'The default API key has hit its usage limit.' });
+        setShowApiKeyModal(true);
+      } else {
+        setError(`Generation failed: ${errorMessage}`);
+        addProcessStep({ status: 'error', title: 'Process Failed', description: errorMessage });
+      }
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleApiKeySubmit = async (key: string) => {
+    setSessionApiKey(key);
+    setShowApiKeyModal(false);
+    // Use a timeout to ensure state has updated before retrying
+    setTimeout(() => {
+        handleGenerate();
+    }, 100);
   };
 
   const isGenerateDisabled = !fashionItemImage || !modelImage || isLoading;
@@ -334,6 +354,11 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-stone-50 flex flex-col">
       <Header onHowItWorksClick={() => setShowHowItWorks(true)} onLogoClick={resetState} />
       {showHowItWorks && <HowItWorks onClose={() => setShowHowItWorks(false)} />}
+      <ApiKeyModal
+        isOpen={showApiKeyModal}
+        onClose={() => setShowApiKeyModal(false)}
+        onSubmit={handleApiKeySubmit}
+      />
       <main className="w-full max-w-6xl mx-auto p-4 sm:p-8 flex-grow flex items-center">
         {showResultsView ? (
           // Results View
